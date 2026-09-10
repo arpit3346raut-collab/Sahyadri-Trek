@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Maharashtra Government - Sahyadri Trekking{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-image">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-12 text-center text-white">
+                <h1 class="display-3 fw-bold mb-4">Explore Sahyadri</h1>
+                <p class="lead mb-4">Discover the majestic forts and breathtaking landscapes of the Western Ghats</p>
+                <a href="#popular-treks" class="btn btn-light btn-lg explore-btn me-3">Explore Treks</a>
+                <a href="/treks" class="btn btn-outline-light btn-lg">View All Treks</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Introduction Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2 class="mb-4">Maharashtra Government - Sahyadri Trekking Portal</h2>
+                <p class="lead">Welcome to the official portal for managing crowd and online slot booking for Sahyadri treks in Maharashtra.</p>
+                <p>Our portal promotes responsible and safe trekking while preserving the natural beauty and historical significance of these ancient forts.</p>
+                <a href="/about" class="btn btn-success">Learn More About Us</a>
+            </div>
+            <div class="col-md-6">
+                <img src="{{ url_for('static', filename='images/fort-placeholder.jpg') }}" 
+                     class="img-fluid rounded shadow featured-image" 
+                     alt="Sahyadri Forts"
+                     data-default-src="{{ url_for('static', filename='images/fort-placeholder.jpg') }}">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Treks Section -->
+<section id="popular-treks" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Popular Treks</h2>
+        <div class="row">
+            {% for trek in treks %}
+            {% if loop.index <= 6 %}
+            <!-- Trek {{ loop.index }} -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 trek-card">
+                    <img src="{{ url_for('static', filename='images/' + get_trek_image(trek.name)) }}" 
+                         class="card-img-top trek-image" 
+                         alt="{{ trek.name }}"
+                         data-default-src="{{ url_for('static', filename='images/' + get_trek_image(trek.name)) }}">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ trek.name }}</h5>
+                        <p class="card-text flex-grow-1">{{ trek.history.split('\n\n')[0] }}</p>
+                        <a href="/trek/{{ trek.id if trek.id else loop.index }}" class="btn btn-success mt-auto">Know More</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="/treks" class="btn btn-success btn-lg">Explore All Treks</a>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">How It Works</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-success">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 70px; height: 70px;">
+                            <span class="fw-bold" style="font-size: 2rem;">1</span>
+                        </div>
+                        <h4>Choose Your Trek</h4>
+                        <p>Browse our collection of forts and select the trek that suits your interest and skill level.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-success">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 70px; height: 70px;">
+                            <span class="fw-bold" style="font-size: 2rem;">2</span>
+                        </div>
+                        <h4>Book Your Slot</h4>
+                        <p>Select date and time slot, and complete your booking with our secure payment system.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-success">
+                    <div class="card-body text-center">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 70px; height: 70px;">
+                            <span class="fw-bold" style="font-size: 2rem;">3</span>
+                        </div>
+                        <h4>Trek Safely</h4>
+                        <p>Receive your QR pass via email and trek with confidence knowing weather and safety are monitored.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="py-5 bg-success text-white">
+    <div class="container text-center">
+        <h2 class="mb-4">Ready for Your Next Adventure?</h2>
+        <p class="lead mb-4">Join thousands of trekkers who have safely explored the majestic forts of Maharashtra</p>
+        <a href="/register" class="btn btn-light btn-lg me-3">Register Now</a>
+        <a href="/login" class="btn btn-outline-light btn-lg">Login</a>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.hero-section {
+    height: 80vh;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    background-image: url("{{ url_for('static', filename='images/' + get_trek_image('Rajgad Fort')) }}");
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 1;
+}
+
+.trek-card {
+    transition: transform 0.3s ease;
+}
+
+.trek-card:hover {
+    transform: translateY(-10px);
+}
+
+.feature-box {
+    transition: transform 0.3s ease;
+}
+
+.feature-box:hover {
+    transform: translateY(-5px);
+}
+
+/* Additional styles for the enhanced landing page */
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.card.border-success {
+    border-width: 2px;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.querySelector('.explore-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelector('#popular-treks').scrollIntoView({
+        behavior: 'smooth'
+    });
+});
+
+// Handle image errors
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle hero image
+    const heroSection = document.querySelector('.hero-section');
+    const heroImageUrl = "{{ url_for('static', filename='images/' + get_trek_image('Rajgad Fort')) }}";
+    const placeholderUrl = "{{ url_for('static', filename='images/fort-placeholder.jpg') }}";
+    
+    const heroImg = new Image();
+    heroImg.onload = function() {
+        heroSection.style.backgroundImage = `url("${heroImageUrl}")`;
+    };
+    heroImg.onerror = function() {
+        heroSection.style.backgroundImage = `url("${placeholderUrl}")`;
+    };
+    heroImg.src = heroImageUrl;
+    
+    // Handle trek images
+    const trekImages = document.querySelectorAll('.trek-image');
+    trekImages.forEach(function(img) {
+        const defaultSrc = img.getAttribute('data-default-src');
+        
+        const testImg = new Image();
+        testImg.onload = function() {
+            img.src = defaultSrc;
+        };
+        testImg.onerror = function() {
+            img.src = placeholderUrl;
+        };
+        testImg.src = defaultSrc;
+    });
+    
+    // Handle featured image
+    const featuredImage = document.querySelector('.featured-image');
+    if (featuredImage) {
+        const defaultSrc = featuredImage.getAttribute('data-default-src');
+        
+        const testImg = new Image();
+        testImg.onload = function() {
+            featuredImage.src = defaultSrc;
+        };
+        testImg.onerror = function() {
+            featuredImage.src = placeholderUrl;
+        };
+        testImg.src = defaultSrc;
+    }
+});
+</script>
+{% endblock %}

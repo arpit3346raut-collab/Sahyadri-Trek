@@ -1,0 +1,149 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Add New Trek - Admin Panel{% endblock %}
+
+{% block page_title %}Add New Trek{% endblock %}
+
+{% block page_actions %}
+<a href="{{ url_for('admin_treks') }}" class="btn btn-sm btn-outline-secondary">
+    <i class="fas fa-arrow-left"></i> Back to Treks
+</a>
+{% endblock %}
+
+{% block admin_content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4>Trek Information</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">Trek Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="region" class="form-label">Region</label>
+                            <input type="text" class="form-control" id="region" name="region" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="difficulty" class="form-label">Difficulty</label>
+                            <select class="form-select" id="difficulty" name="difficulty" required>
+                                <option value="">Select Difficulty</option>
+                                <option value="Easy">Easy</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Hard">Hard</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="base_village" class="form-label">Base Village</label>
+                            <input type="text" class="form-control" id="base_village" name="base_village" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="contact" class="form-label">Contact</label>
+                            <input type="text" class="form-control" id="contact" name="contact">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="distance" class="form-label">Distance (km)</label>
+                            <input type="text" class="form-control" id="distance" name="distance">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="trek_time" class="form-label">Trek Time</label>
+                            <input type="text" class="form-control" id="trek_time" name="trek_time">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="total_slots" class="form-label">Total Slots (400)</label>
+                            <input type="number" class="form-control" id="total_slots" name="total_slots" 
+                                   value="400" min="1" max="1000">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="morning_slots" class="form-label">Morning Slots (200)</label>
+                            <input type="number" class="form-control" id="morning_slots" name="morning_slots" 
+                                   value="200" min="1" max="500">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="afternoon_slots" class="form-label">Afternoon Slots (200)</label>
+                            <input type="number" class="form-control" id="afternoon_slots" name="afternoon_slots" 
+                                   value="200" min="1" max="500">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="routes" class="form-label">Routes</label>
+                        <textarea class="form-control" id="routes" name="routes" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="history" class="form-label">History</label>
+                        <textarea class="form-control" id="history" name="history" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="parking" class="form-label">Parking Information</label>
+                        <textarea class="form-control" id="parking" name="parking" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="rescue_number" class="form-label">Rescue Number</label>
+                            <input type="text" class="form-control" id="rescue_number" name="rescue_number">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="helpline" class="form-label">Helpline</label>
+                            <input type="text" class="form-control" id="helpline" name="helpline">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="forest_officer" class="form-label">Forest Officer</label>
+                        <input type="text" class="form-control" id="forest_officer" name="forest_officer">
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('admin_treks') }}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-success">Add Trek</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h4>Instructions</h4>
+            </div>
+            <div class="card-body">
+                <p><strong>Slot Management:</strong></p>
+                <ul>
+                    <li>Total slots = Morning slots + Afternoon slots</li>
+                    <li>Default: 400 total (200 morning, 200 afternoon)</li>
+                    <li>Adjust based on trek capacity</li>
+                </ul>
+                
+                <p><strong>Required Fields:</strong></p>
+                <ul>
+                    <li>Trek Name</li>
+                    <li>Region</li>
+                    <li>Difficulty</li>
+                    <li>Base Village</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

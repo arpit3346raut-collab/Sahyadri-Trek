@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}All Treks - Maharashtra Government - Sahyadri Trekking{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Sahyadri Treks</h1>
+    
+    <!-- Search and Filters -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search treks..." id="searchInput">
+                <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+            </div>
+        </div>
+        <div class="col-md-6 text-end">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown">
+                    Difficulty
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item filter-difficulty" href="#" data-difficulty="all">All</a></li>
+                    <li><a class="dropdown-item filter-difficulty" href="#" data-difficulty="easy">Easy</a></li>
+                    <li><a class="dropdown-item filter-difficulty" href="#" data-difficulty="medium">Medium</a></li>
+                    <li><a class="dropdown-item filter-difficulty" href="#" data-difficulty="hard">Hard</a></li>
+                </ul>
+            </div>
+            
+            <div class="btn-group ms-2" role="group">
+                <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown">
+                    Region
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item filter-region" href="#" data-region="all">All</a></li>
+                    <li><a class="dropdown-item filter-region" href="#" data-region="pune">Pune</a></li>
+                    <li><a class="dropdown-item filter-region" href="#" data-region="satara">Satara</a></li>
+                    <li><a class="dropdown-item filter-region" href="#" data-region="nashik">Nashik</a></li>
+                    <li><a class="dropdown-item filter-region" href="#" data-region="raigad">Raigad</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Treks Grid -->
+    <div class="row" id="treksContainer">
+        {% for trek in treks %}
+        <div class="col-lg-4 col-md-6 mb-4 trek-item" data-difficulty="{{ trek.difficulty.lower() }}" data-region="{{ trek.region.lower() }}">
+            <div class="card h-100 trek-card">
+                <img src="{{ url_for('static', filename='images/' + get_trek_image(trek.name)) }}" 
+                     class="card-img-top trek-image" 
+                     alt="{{ trek.name }}"
+                     data-default-src="{{ url_for('static', filename='images/' + get_trek_image(trek.name)) }}">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ trek.name }}</h5>
+                    <p class="card-text flex-grow-1">{{ trek.history.split('\n\n')[0] }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        {% if trek.difficulty == "Easy" %}
+                            <span class="badge bg-success">{{ trek.difficulty }}</span>
+                        {% elif trek.difficulty == "Medium" %}
+                            <span class="badge bg-warning">{{ trek.difficulty }}</span>
+                        {% else %}
+                            <span class="badge bg-danger">{{ trek.difficulty }}</span>
+                        {% endif %}
+                        <span class="badge bg-info">{{ trek.region }}</span>
+                    </div>
+                    <a href="/trek/{{ trek.id }}" class="btn btn-success mt-3">Know More</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Filter functionality
+document.querySelectorAll('.filter-difficulty').forEach(item => {
+    item.addEventListener('click', function(e) {
+        e.preventDefault();
+        const difficulty = this.getAttribute('data-difficulty');
+        filterTreks(difficulty, 'difficulty');
+    });
+});
+
+document.querySelectorAll('.filter-region').forEach(item => {
+    item.addEventListener('click', function(e) {
+        e.preventDefault();
+        const region = this.getAttribute('data-region');
+        filterTreks(region, 'region');
+    });
+});
+
+function filterTreks(filterValue, filterType) {
+    const treks = document.querySelectorAll('.trek-item');
+    
+    treks.forEach(trek => {
+        const trekFilterValue = trek.getAttribute(`data-${filterType}`);
+        
+        if (filterValue === 'all' || trekFilterValue === filterValue) {
+            trek.style.display = 'block';
+        } else {
+            trek.style.display = 'none';
+        }
+    });
+}
+
+// Search functionality
+document.getElementById('searchButton').addEventListener('click', function() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const treks = document.querySelectorAll('.trek-item');
+    
+    treks.forEach(trek => {
+        const trekTitle = trek.querySelector('.card-title').textContent.toLowerCase();
+        if (trekTitle.includes(searchTerm)) {
+            trek.style.display = 'block';
+        } else {
+            trek.style.display = 'none';
+        }
+    });
+});
+
+// Allow search on Enter key
+document.getElementById('searchInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        document.getElementById('searchButton').click();
+    }
+});
+
+// Handle image errors
+document.addEventListener('DOMContentLoaded', function() {
+    const trekImages = document.querySelectorAll('.trek-image');
+    const placeholderUrl = "{{ url_for('static', filename='images/fort-placeholder.jpg') }}";
+    
+    trekImages.forEach(function(img) {
+        const defaultSrc = img.getAttribute('data-default-src');
+        
+        const testImg = new Image();
+        testImg.onload = function() {
+            img.src = defaultSrc;
+        };
+        testImg.onerror = function() {
+            img.src = placeholderUrl;
+        };
+        testImg.src = defaultSrc;
+    });
+});
+</script>
+{% endblock %}

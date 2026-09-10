@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Booking Success - Maharashtra Government - Sahyadri Trekking{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h2>Booking Confirmation</h2>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-success fa-5x"></i>
+                    </div>
+                    
+                    <h3 class="mb-3">Your trek booking is confirmed!</h3>
+                    
+                    <div class="alert alert-success" role="alert">
+                        <h4 class="alert-heading">Booking Details</h4>
+                        <p><strong>Trek:</strong> {{ trek.name }}</p>
+                        <p><strong>Date:</strong> {{ booking.trek_date }}</p>
+                        <p><strong>Slot:</strong> 
+                            {% if booking.time_slot == 'morning' %}
+                                Morning (6:00 AM - 12:00 PM)
+                            {% else %}
+                                Afternoon (12:00 PM - 6:00 PM)
+                            {% endif %}
+                        </p>
+                        <p><strong>Number of Trekkers:</strong> {{ booking.num_trekkers }}</p>
+                        <p><strong>Booking ID:</strong> {{ booking.booking_ref }}</p>
+                    </div>
+                    
+                    <!-- Trek Pass with QR Code -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h4><i class="fas fa-ticket-alt"></i> Your Trek Pass</h4>
+                        </div>
+                        <div class="card-body">
+                            {% if booking.qr_code %}
+                                <div class="text-center mb-3">
+                                    <img src="data:image/png;base64,{{ booking.qr_code }}" alt="Trek Pass QR Code" class="img-fluid" style="max-width: 200px;">
+                                </div>
+                                <p class="text-muted">Scan this QR code at the trek entrance for verification</p>
+                            {% else %}
+                                <p class="text-muted">QR code will be generated shortly</p>
+                            {% endif %}
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Trekker Name:</strong> {{ booking.name }}</p>
+                                    <p><strong>Contact:</strong> {{ booking.mobile }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Email:</strong> {{ booking.email }}</p>
+                                    <p><strong>Amount Paid:</strong> ₹{{ booking.total_amount }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="lead">Please carry a printed copy of this pass during the trek.</p>
+                    <p>Keep this QR code handy for entry verification at the trek start point.</p>
+                    
+                    <div class="mt-4">
+                        <a href="/download-trek-pass/{{ booking.id }}" class="btn btn-success btn-lg me-2">
+                            <i class="fas fa-download"></i> Download Trek Pass
+                        </a>
+                        <button class="btn btn-success btn-lg me-2" onclick="window.print()">
+                            <i class="fas fa-print"></i> Print Trek Pass
+                        </button>
+                        <a href="/" class="btn btn-outline-success btn-lg">
+                            <i class="fas fa-home"></i> Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

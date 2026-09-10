@@ -1,0 +1,291 @@
+{% extends "base.html" %}
+
+{% block title %}Book Trek - Maharashtra Government - Sahyadri Trekking{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-success text-white text-center">
+                    <h2>Book Trek Slot - {{ trek.name }}</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Progress Bar -->
+                    <div class="progress mb-4">
+                        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">Step 1 of 4</div>
+                    </div>
+                    
+                    <!-- Booking Form -->
+                    <form id="bookingForm">
+                        <input type="hidden" id="trekId" value="{{ trek.id }}">
+                        
+                        <!-- Step 1: Date and Slot Selection -->
+                        <div class="booking-step" id="step1">
+                            <h4 class="mb-4">Step 1: Select Date and Slot</h4>
+                            
+                            <div class="mb-3">
+                                <label for="trekDate" class="form-label">Select Date</label>
+                                <input type="date" class="form-control" id="trekDate" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Select Slot</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="timeSlot" id="morningSlot" value="morning" required>
+                                    <label class="form-check-label" for="morningSlot">
+                                        Morning (6:00 AM - 12:00 PM) - <span id="morningSlots">{{ trek.morning_slots if trek.morning_slots else 200 }}</span> slots available
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="timeSlot" id="afternoonSlot" value="afternoon">
+                                    <label class="form-check-label" for="afternoonSlot">
+                                        Afternoon (12:00 PM - 6:00 PM) - <span id="afternoonSlots">{{ trek.afternoon_slots if trek.afternoon_slots else 200 }}</span> slots available
+                                    </label>
+                                </div>
+                                <div class="form-text">Each date has its own slot allocation. Actual availability will be confirmed after date selection.</div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="button" class="btn btn-success" id="step1Next">Next</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2: Number of Trekkers -->
+                        <div class="booking-step d-none" id="step2">
+                            <h4 class="mb-4">Step 2: Number of Trekkers</h4>
+                            
+                            <div class="mb-3">
+                                <label for="numTrekkers" class="form-label">Number of Trekkers</label>
+                                <input type="number" class="form-control" id="numTrekkers" min="1" max="6" value="1" required>
+                                <div class="form-text">Maximum 6 trekkers per booking</div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                <button type="button" class="btn btn-secondary" id="step2Prev">Previous</button>
+                                <button type="button" class="btn btn-success" id="step2Next">Next</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3: Personal Information -->
+                        <div class="booking-step d-none" id="step3">
+                            <h4 class="mb-4">Step 3: Personal Information</h4>
+                            
+                            <div class="mb-3">
+                                <label for="fullName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="fullName" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="mobileNumber" class="form-label">Mobile Number</label>
+                                <input type="tel" class="form-control" id="mobileNumber" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                <button type="button" class="btn btn-secondary" id="step3Prev">Previous</button>
+                                <button type="button" class="btn btn-success" id="step3Next">Next</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 4: Booking Summary and Confirmation -->
+                        <div class="booking-step d-none" id="step4">
+                            <h4 class="mb-4">Step 4: Booking Summary</h4>
+                            
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h5>Booking Summary</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Trek:</strong> {{ trek.name }}</p>
+                                    <p><strong>Date:</strong> <span id="summaryDate">-</span></p>
+                                    <p><strong>Slot:</strong> <span id="summarySlot">-</span></p>
+                                    <p><strong>Number of Trekkers:</strong> <span id="summaryTrekkers">-</span></p>
+                                    <p><strong>Total Amount:</strong> ₹<span id="totalAmount">50</span></p>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="rulesCheckbox" required>
+                                <label class="form-check-label" for="rulesCheckbox">
+                                    I have read and agree to the <a href="/safety" target="_blank">Rules and Regulations</a> for trekking
+                                </label>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                <button type="button" class="btn btn-secondary" id="step4Prev">Previous</button>
+                                <button type="button" class="btn btn-success" id="confirmBookingBtn">Confirm Booking</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Initialize date to today
+document.getElementById('trekDate').valueAsDate = new Date();
+
+// Update slot availability when date changes
+document.getElementById('trekDate').addEventListener('change', function() {
+    updateSlotAvailability();
+});
+
+// Initialize slot availability
+updateSlotAvailability();
+
+function updateSlotAvailability() {
+    const trekDate = document.getElementById('trekDate').value;
+    const trekId = document.getElementById('trekId').value;
+    
+    // For now, we'll just show the default slot counts
+    // In a full implementation, this would check actual availability for the selected date
+    console.log('Date changed to:', trekDate);
+}
+
+// Step navigation
+document.getElementById('step1Next').addEventListener('click', function() {
+    if (document.getElementById('trekDate').value && document.querySelector('input[name="timeSlot"]:checked')) {
+        document.getElementById('step1').classList.add('d-none');
+        document.getElementById('step2').classList.remove('d-none');
+        updateProgressBar(25);
+    } else {
+        alert('Please select date and time slot');
+    }
+});
+
+document.getElementById('step2Next').addEventListener('click', function() {
+    const numTrekkers = document.getElementById('numTrekkers').value;
+    const timeSlot = document.querySelector('input[name="timeSlot"]:checked').value;
+    const trekDate = document.getElementById('trekDate').value;
+    const trekId = document.getElementById('trekId').value;
+    
+    if (numTrekkers >= 1 && numTrekkers <= 6) {
+        // Check availability
+        fetch('/api/check_availability', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `trek_id=${trekId}&trek_date=${trekDate}&time_slot=${timeSlot}&num_trekkers=${numTrekkers}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.available) {
+                document.getElementById('step2').classList.add('d-none');
+                document.getElementById('step3').classList.remove('d-none');
+                updateProgressBar(50);
+            } else {
+                alert('Not enough slots available for the selected time slot');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Proceed anyway in case of error (for demo purposes)
+            document.getElementById('step2').classList.add('d-none');
+            document.getElementById('step3').classList.remove('d-none');
+            updateProgressBar(50);
+        });
+    } else {
+        alert('Please enter a valid number of trekkers (1-6)');
+    }
+});
+
+document.getElementById('step3Next').addEventListener('click', function() {
+    const fullName = document.getElementById('fullName').value;
+    const mobileNumber = document.getElementById('mobileNumber').value;
+    const email = document.getElementById('email').value;
+    
+    if (fullName && mobileNumber && email) {
+        // Update summary
+        document.getElementById('summaryDate').textContent = document.getElementById('trekDate').value;
+        const slot = document.querySelector('input[name="timeSlot"]:checked').value;
+        document.getElementById('summarySlot').textContent = slot === 'morning' ? 'Morning' : 'Afternoon';
+        document.getElementById('summaryTrekkers').textContent = document.getElementById('numTrekkers').value;
+        
+        // Update total amount (₹50 per trekker)
+        const totalAmount = 50 * parseInt(document.getElementById('numTrekkers').value);
+        document.getElementById('totalAmount').textContent = totalAmount;
+        
+        document.getElementById('step3').classList.add('d-none');
+        document.getElementById('step4').classList.remove('d-none');
+        updateProgressBar(75);
+    } else {
+        alert('Please fill all personal information fields');
+    }
+});
+
+// Previous buttons
+document.getElementById('step2Prev').addEventListener('click', function() {
+    document.getElementById('step2').classList.add('d-none');
+    document.getElementById('step1').classList.remove('d-none');
+    updateProgressBar(0);
+});
+
+document.getElementById('step3Prev').addEventListener('click', function() {
+    document.getElementById('step3').classList.add('d-none');
+    document.getElementById('step2').classList.remove('d-none');
+    updateProgressBar(25);
+});
+
+document.getElementById('step4Prev').addEventListener('click', function() {
+    document.getElementById('step4').classList.add('d-none');
+    document.getElementById('step3').classList.remove('d-none');
+    updateProgressBar(50);
+});
+
+// Confirm Booking button
+document.getElementById('confirmBookingBtn').addEventListener('click', function(e) {
+    // Check if rules checkbox is checked
+    if (!document.getElementById('rulesCheckbox').checked) {
+        alert('Please agree to the Rules and Regulations to proceed with booking.');
+        return;
+    }
+    
+    e.preventDefault();
+    
+    // Get form data
+    const formData = new FormData();
+    formData.append('trek_id', document.getElementById('trekId').value);
+    formData.append('trek_date', document.getElementById('trekDate').value);
+    formData.append('time_slot', document.querySelector('input[name="timeSlot"]:checked').value);
+    formData.append('num_trekkers', document.getElementById('numTrekkers').value);
+    formData.append('name', document.getElementById('fullName').value);
+    formData.append('mobile', document.getElementById('mobileNumber').value);
+    formData.append('email', document.getElementById('email').value);
+    
+    // Submit booking directly (no payment required)
+    fetch('/process_booking', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Redirect to booking success page with booking ID
+            window.location.href = '/booking-success?booking_id=' + data.booking_id;
+        } else {
+            alert('Booking failed: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Booking failed. Please try again.');
+    });
+});
+
+function updateProgressBar(percent) {
+    const progressBar = document.querySelector('.progress-bar');
+    progressBar.style.width = percent + '%';
+    progressBar.setAttribute('aria-valuenow', percent);
+}
+</script>
+{% endblock %}

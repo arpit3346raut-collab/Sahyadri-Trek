@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Maharashtra Government - Sahyadri Trekking{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Welcome, {{ user.name if user else 'User' }}</h1>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Profile Section -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h4>Profile</h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="profile-icon mb-3">
+                        <i class="fas fa-user-circle fa-5x text-success"></i>
+                    </div>
+                    <h5>{{ user.name if user else 'User' }}</h5>
+                    <p>{{ user.email if user else 'user@example.com' }}</p>
+                    <p>{{ user.mobile if user else '+91 00000 00000' }}</p>
+                    <a href="/profile" class="btn btn-outline-success btn-sm">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Upcoming Treks -->
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h4>Upcoming Treks</h4>
+                </div>
+                <div class="card-body">
+                    {% if bookings %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Trek</th>
+                                    <th>Date</th>
+                                    <th>Slot</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in bookings %}
+                                {% if booking.booking_status == 'confirmed' %}
+                                <tr>
+                                    <td>{{ booking.trek_name }}</td>
+                                    <td>{{ booking.trek_date }}</td>
+                                    <td>{{ booking.time_slot }}</td>
+                                    <td><span class="badge bg-warning">Confirmed</span></td>
+                                    <td>
+                                        <a href="/download-trek-pass/{{ booking.id }}" class="btn btn-sm btn-success">Show Pass</a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p>No upcoming treks. <a href="/treks">Book a trek now!</a></p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Past Treks -->
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4>Past Treks</h4>
+                </div>
+                <div class="card-body">
+                    {% if bookings %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Trek</th>
+                                    <th>Date</th>
+                                    <th>Slot</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in bookings %}
+                                {% if booking.booking_status != 'confirmed' %}
+                                <tr>
+                                    <td>{{ booking.trek_name }}</td>
+                                    <td>{{ booking.trek_date }}</td>
+                                    <td>{{ booking.time_slot }}</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                    <td>
+                                        <a href="/download-trek-pass/{{ booking.id }}" class="btn btn-sm btn-outline-success">Show Pass</a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p>No past treks yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

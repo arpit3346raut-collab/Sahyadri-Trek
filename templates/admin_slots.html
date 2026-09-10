@@ -1,0 +1,92 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Slot Management - Admin Panel{% endblock %}
+
+{% block page_title %}Slot Management{% endblock %}
+
+{% block page_actions %}
+<a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm btn-outline-secondary">
+    <i class="fas fa-arrow-left"></i> Back to Dashboard
+</a>
+{% endblock %}
+
+{% block admin_content %}
+<div class="card">
+    <div class="card-header bg-success text-white">
+        <h4>Manage Trek Slots</h4>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label for="slotDate" class="form-label">Select Date for Slot Management</label>
+            <input type="date" class="form-control" id="slotDate" name="slotDate" value="{{ today if today else '' }}">
+            <div class="form-text">Note: Date-specific slot management requires backend implementation. Currently managing default slots.</div>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Trek Name</th>
+                        <th>Region</th>
+                        <th>Total Slots</th>
+                        <th>Available Morning</th>
+                        <th>Available Afternoon</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trek in treks %}
+                    <tr>
+                        <form method="POST" action="{{ url_for('update_slots', trek_id=trek.id) }}">
+                        <td>{{ trek.name }}</td>
+                        <td>{{ trek.region }}</td>
+                        <td>{{ trek.total_slots }}</td>
+                        <td>
+                            <input type="number" class="form-control form-control-sm" 
+                                   name="morning_slots" 
+                                   value="{{ trek.available_morning_slots }}" 
+                                   min="0" max="{{ trek.morning_slots }}">
+                        </td>
+                        <td>
+                            <input type="number" class="form-control form-control-sm" 
+                                   name="afternoon_slots" 
+                                   value="{{ trek.available_afternoon_slots }}" 
+                                   min="0" max="{{ trek.afternoon_slots }}">
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-sm btn-success">
+                                <i class="fas fa-save"></i> Update
+                            </button>
+                        </td>
+                        </form>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header bg-info text-white">
+        <h4>Slot Management Instructions</h4>
+    </div>
+    <div class="card-body">
+        <ul>
+            <li><strong>Date Selection:</strong> Select a date to manage slots for specific days (future implementation)</li>
+            <li><strong>Total Slots:</strong> The maximum capacity for this trek per day</li>
+            <li><strong>Available Morning Slots:</strong> Number of slots available for morning treks</li>
+            <li><strong>Available Afternoon Slots:</strong> Number of slots available for afternoon treks</li>
+            <li><strong>Adjust Values:</strong> Modify available slots based on current conditions or bookings</li>
+            <li><strong>Maximum Values:</strong> Cannot exceed the total allocated slots for each time period</li>
+        </ul>
+        <p class="text-danger">
+            <strong>Note:</strong> Be careful when adjusting slots. Reducing slots may affect existing bookings.
+        </p>
+        <div class="alert alert-warning">
+            <strong>Future Enhancement:</strong> Date-specific slot management is planned for future implementation. 
+            This will allow you to set different slot availability for different dates.
+        </div>
+    </div>
+</div>
+{% endblock %}

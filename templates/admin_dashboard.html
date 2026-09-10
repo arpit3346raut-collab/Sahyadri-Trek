@@ -1,0 +1,147 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Admin Dashboard - Maharashtra Government - Sahyadri Trekking{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block admin_content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-header">Total Treks</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ stats.total_treks }}</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-header">Total Bookings</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ stats.total_bookings }}</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-header">Active Bookings</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ stats.active_bookings }}</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-header">Total Revenue</div>
+            <div class="card-body">
+                <h5 class="card-title">₹{{ "{:,.0f}".format(stats.total_revenue) }}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h4>Recent Bookings</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Trek</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in recent_bookings %}
+                            <tr>
+                                <td>{{ booking.user_name }}</td>
+                                <td>{{ booking.trek_name }}</td>
+                                <td>{{ booking.created_at.strftime('%Y-%m-%d') if booking.created_at else 'N/A' }}</td>
+                                <td>
+                                    <span class="badge bg-{% if booking.booking_status == 'confirmed' %}success{% elif booking.booking_status == 'pending' %}warning{% else %}danger{% endif %}">
+                                        {{ booking.booking_status|title }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h4>Popular Treks</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Trek Name</th>
+                                <th>Bookings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for trek_stat in stats.popular_treks %}
+                            <tr>
+                                <td>{{ trek_stat.trek_name }}</td>
+                                <td>{{ trek_stat.booking_count }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h4>Quick Actions</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+                        <a href="{{ url_for('admin_bookings') }}" class="btn btn-success w-100">
+                            <i class="fas fa-book"></i> View All Bookings
+                        </a>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <a href="{{ url_for('admin_treks') }}" class="btn btn-info w-100">
+                            <i class="fas fa-mountain"></i> Manage Treks
+                        </a>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <a href="{{ url_for('admin_users') }}" class="btn btn-warning w-100">
+                            <i class="fas fa-users"></i> View Users
+                        </a>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <a href="{{ url_for('admin_slots') }}" class="btn btn-primary w-100">
+                            <i class="fas fa-sliders-h"></i> Manage Slots
+                        </a>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary w-100">
+                            <i class="fas fa-sync"></i> Refresh
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

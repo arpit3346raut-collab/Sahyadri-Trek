@@ -1,0 +1,66 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Manage Users - Admin Panel{% endblock %}
+
+{% block page_title %}Users Management{% endblock %}
+
+{% block page_actions %}
+<a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm btn-outline-secondary">
+    <i class="fas fa-arrow-left"></i> Back to Dashboard
+</a>
+{% endblock %}
+
+{% block admin_content %}
+<div class="card">
+    <div class="card-header bg-success text-white">
+        <h4>All Users</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Role</th>
+                        <th>Created</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.mobile }}</td>
+                        <td>
+                            <span class="badge bg-{% if user.role == 'admin' %}danger{% else %}primary{% endif %}">
+                                {{ user.role|title }}
+                            </span>
+                        </td>
+                        <td>{{ user.created_at.strftime('%Y-%m-%d') if user.created_at else 'N/A' }}</td>
+                        <td>
+                            <span class="badge bg-{% if user.is_verified %}success{% else %}warning{% endif %}">
+                                {% if user.is_verified %}Verified{% else %}Unverified{% endif %}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-sm btn-outline-primary" disabled>
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" disabled>
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

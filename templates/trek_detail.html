@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}{{ trek.name }} - Maharashtra Government - Sahyadri Trekking{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Trek Header -->
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">{{ trek.name }}</h1>
+        </div>
+    </div>
+    
+    <!-- Trek Images -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div id="trekCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{{ url_for('static', filename='images/' + get_trek_image(trek.name)) }}" 
+                             class="d-block w-100 carousel-image" 
+                             alt="{{ trek.name }}"
+                             data-default-src="{{ url_for('static', filename='images/' + get_trek_image(trek.name)) }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Trek Information -->
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h3>Trek Information</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Difficulty Level:</strong> 
+                                {% if trek.difficulty == "Easy" %}
+                                    <span class="badge bg-success">{{ trek.difficulty }}</span>
+                                {% elif trek.difficulty == "Medium" %}
+                                    <span class="badge bg-warning">{{ trek.difficulty }}</span>
+                                {% else %}
+                                    <span class="badge bg-danger">{{ trek.difficulty }}</span>
+                                {% endif %}
+                            </p>
+                            <p><strong>Base Village:</strong> {{ trek.base_village }}</p>
+                            <p><strong>Contact Number:</strong> {{ trek.contact }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Trail Distance:</strong> {{ trek.distance }}</p>
+                            <p><strong>Average Trek Time:</strong> {{ trek.trek_time }}</p>
+                        </div>
+                    </div>
+                    
+                    <h4 class="mt-4">Routes</h4>
+                    <ul>
+                        {% for route in trek.routes %}
+                        <li>{{ route }}</li>
+                        {% endfor %}
+                    </ul>
+                    
+                    <h4 class="mt-4">History</h4>
+                    {% for paragraph in trek.history.split('\n\n') %}
+                    <p>{{ paragraph }}</p>
+                    {% endfor %}
+                    
+                    <h4 class="mt-4">Parking Information</h4>
+                    <p>{{ trek.parking }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Booking and Emergency Contacts -->
+        <div class="col-md-4">
+            <!-- Emergency Contacts -->
+            <div class="card mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h3>Emergency Contacts</h3>
+                </div>
+                <div class="card-body">
+                    <p><strong>Rescue Number:</strong> {{ trek.rescue_number }}</p>
+                    <p><strong>Helpline:</strong> {{ trek.helpline }}</p>
+                    <p><strong>Forest Officer:</strong> {{ trek.forest_officer }}</p>
+                </div>
+            </div>
+            
+            <!-- Booking -->
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3>Book Trek Slot</h3>
+                </div>
+                <div class="card-body text-center">
+                    <button class="btn btn-success btn-lg" id="bookSlotBtn">
+                        <i class="fas fa-ticket-alt"></i> Book Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('bookSlotBtn').addEventListener('click', function() {
+    window.location.href = '/book/{{ trek.id }}';
+});
+
+// Handle carousel image errors
+document.addEventListener('DOMContentLoaded', function() {
+    const carouselImages = document.querySelectorAll('.carousel-image');
+    const placeholderUrl = "{{ url_for('static', filename='images/fort-placeholder.jpg') }}";
+    
+    carouselImages.forEach(function(img) {
+        const defaultSrc = img.getAttribute('data-default-src');
+        
+        const testImg = new Image();
+        testImg.onload = function() {
+            img.src = defaultSrc;
+        };
+        testImg.onerror = function() {
+            img.src = placeholderUrl;
+        };
+        testImg.src = defaultSrc;
+    });
+});
+</script>
+{% endblock %}
