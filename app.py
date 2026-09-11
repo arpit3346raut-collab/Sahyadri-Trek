@@ -22,25 +22,6 @@ app.config.from_object(Config)
 mail = Mail(app)
 db = Database(app)
 
-def initialize_treks():
-    """Seed the local trek collection once when MongoDB has no trek data."""
-    if db.mongo.db.treks.count_documents({}) > 0:
-        return
-
-    data_path = Path(__file__).with_name('treks_data.json')
-    with data_path.open('r', encoding='utf-8') as data_file:
-        treks = json.load(data_file)
-
-    for trek in treks:
-        trek.pop('id', None)
-        trek.pop('available_slots', None)
-        trek['is_active'] = True
-        trek['created_at'] = datetime.utcnow()
-
-    if treks:
-        db.mongo.db.treks.insert_many(treks)
-
-
 # Session configuration
 app.config['SESSION_MONGODB'] = db.mongo
 Session(app)
