@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 from bson.objectid import ObjectId
+from pymongo.errors import PyMongoError
 import bcrypt
 from config import Config
 from models import User, Trek, Booking, Admin
@@ -65,12 +66,18 @@ def get_trek_image(trek_name):
 @app.route('/')
 def index():
     # Get popular treks (first 6)
-    treks = db.get_all_treks()[:6]
+    try:
+        treks = db.get_all_treks()[:6]
+    except PyMongoError:
+        treks = []
     return render_template('index.html', treks=treks)
 
 @app.route('/treks')
 def treks():
-    all_treks = db.get_all_treks()
+    try:
+        all_treks = db.get_all_treks()
+    except PyMongoError:
+        all_treks = []
     return render_template('treks.html', treks=all_treks)
 
 @app.route('/trek/<trek_id>')
