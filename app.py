@@ -41,8 +41,6 @@ def initialize_treks():
         db.mongo.db.treks.insert_many(treks)
 
 
-initialize_treks()
-
 # Session configuration
 app.config['SESSION_MONGODB'] = db.mongo
 Session(app)
