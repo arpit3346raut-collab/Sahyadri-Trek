@@ -1,6 +1,7 @@
 .venv/
 venv/
 env/
+.venv-arpit/
 __pycache__/
 *.py[cod]
 .env
@@ -8,3 +9,4 @@ __pycache__/
 static/uploads/
 *.log
 .DS_Store
+.qoder/

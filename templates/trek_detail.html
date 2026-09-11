@@ -22,7 +22,27 @@
                              alt="{{ trek.name }}"
                              data-default-src="{{ url_for('static', filename='images/' + get_trek_image(trek.name)) }}">
                     </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='images/' + get_trek_image(trek.name).replace('.', '2.')) }}" 
+                             class="d-block w-100 carousel-image" 
+                             alt="{{ trek.name }}"
+                             data-default-src="{{ url_for('static', filename='images/' + get_trek_image(trek.name).replace('.', '2.')) }}">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ url_for('static', filename='images/' + get_trek_image(trek.name).replace('.', '3.')) }}" 
+                             class="d-block w-100 carousel-image" 
+                             alt="{{ trek.name }}"
+                             data-default-src="{{ url_for('static', filename='images/' + get_trek_image(trek.name).replace('.', '3.')) }}">
+                    </div>
                 </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#trekCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#trekCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
         </div>
     </div>

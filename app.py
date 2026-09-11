@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, send_file, make_response
 from flask_pymongo import PyMongo
 from flask_mail import Mail, Message
@@ -23,6 +22,7 @@ app.config.from_object(Config)
 mail = Mail(app)
 db = Database(app)
 
+<<<<<<< HEAD
 
 def initialize_treks():
     """Seed the local trek collection once when MongoDB has no trek data."""
@@ -45,6 +45,8 @@ def initialize_treks():
 
 initialize_treks()
 
+=======
+>>>>>>> f4963f3 (Prepare Sahyadri Trek for Render deployment)
 # Session configuration
 app.config['SESSION_MONGODB'] = db.mongo
 Session(app)
@@ -57,7 +59,11 @@ def inject_image_helper():
 # Load trek data from JSON (for initial setup)
 def load_trek_data():
     try:
+<<<<<<< HEAD
         with Path(__file__).with_name('treks_data.json').open('r', encoding='utf-8') as f:
+=======
+        with open('treks_data.json', 'r') as f:
+>>>>>>> f4963f3 (Prepare Sahyadri Trek for Render deployment)
             return json.load(f)
     except FileNotFoundError:
         return []
@@ -67,7 +73,11 @@ def get_trek_image(trek_name):
     """Get the appropriate image file for a trek based on uploaded images"""
     # Mapping of trek names to image files
     image_mapping = {
+<<<<<<< HEAD
         'Rajgad Fort': 'rajgad-fort.jpg',
+=======
+        'Rajgad Fort': 'fort-placeholder.jpg',
+>>>>>>> f4963f3 (Prepare Sahyadri Trek for Render deployment)
         'Torna Fort': 'torna.jpg',
         'Sinhagad Fort': 'sinhagad.jpg',
         'Harishchandragad Fort': 'harishchandragad.jpeg',
